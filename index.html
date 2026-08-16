@@ -6,104 +6,153 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>수도권 공공주택 공고</title>
+<title>수도권 청년주택 브리핑</title>
 
 <style>
 body {
     margin: 0;
-    padding: 20px;
-    background: #f3f5f9;
+    background: #f4f6fa;
     color: #1f2937;
     font-family: "Apple SD Gothic Neo", Arial, sans-serif;
 }
 
 .container {
-    max-width: 1400px;
+    max-width: 1100px;
     margin: auto;
-}
-
-.card {
     padding: 20px;
-    background: white;
-    border-radius: 15px;
-    box-shadow: 0 3px 14px rgba(0, 0, 0, 0.08);
 }
 
-.filters {
+.header {
+    padding: 38px 25px;
+    color: white;
+    background: linear-gradient(135deg, #1e3a8a, #2563eb);
+    border-radius: 18px;
+}
+
+.header p {
+    margin-bottom: 0;
+    opacity: 0.9;
+}
+
+.statistics {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin: 20px 0;
+}
+
+.stat {
+    padding: 18px;
+    text-align: center;
+    background: white;
+    border-radius: 12px;
+}
+
+.stat strong {
+    display: block;
+    color: #2563eb;
+    font-size: 27px;
+}
+
+.controls {
     display: flex;
     gap: 10px;
-    margin: 20px 0;
     flex-wrap: wrap;
+    margin: 25px 0;
 }
 
-input, select, button {
-    padding: 11px 14px;
+.controls input,
+.controls select {
+    padding: 12px;
     border: 1px solid #d1d5db;
-    border-radius: 8px;
+    border-radius: 9px;
     font-size: 15px;
 }
 
-#searchInput {
+.controls input {
     flex: 1;
     min-width: 220px;
 }
 
-.region-button {
-    background: white;
-    cursor: pointer;
-}
-
-.region-button.active {
-    color: white;
-    background: #2563eb;
-}
-
-.checkbox-area {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-}
-
-.table-area {
-    overflow-x: auto;
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-    white-space: nowrap;
-}
-
-th {
-    padding: 12px;
-    background: #1e3a8a;
-    color: white;
-}
-
-td {
-    padding: 12px;
-    text-align: center;
-    border-bottom: 1px solid #e5e7eb;
-}
-
-td.title {
-    max-width: 420px;
-    text-align: left;
-    white-space: normal;
-}
-
-.link-button {
+.excel-link {
     display: inline-block;
-    padding: 7px 11px;
+    padding: 12px 15px;
     color: white;
-    background: #2563eb;
-    border-radius: 7px;
+    background: #059669;
+    border-radius: 9px;
     text-decoration: none;
 }
 
-#resultCount {
-    margin-bottom: 12px;
+.section {
+    margin-top: 35px;
+}
+
+.section-title {
+    border-bottom: 3px solid #2563eb;
+    padding-bottom: 9px;
+}
+
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+}
+
+.notice-card {
+    padding: 20px;
+    background: white;
+    border-radius: 14px;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.07);
+}
+
+.card-top {
+    display: flex;
+    justify-content: space-between;
+}
+
+.region {
+    color: #2563eb;
+    font-weight: bold;
+}
+
+.d-day {
+    padding: 5px 9px;
+    color: #b91c1c;
+    background: #fee2e2;
+    border-radius: 20px;
+    font-weight: bold;
+}
+
+.notice-info {
+    color: #4b5563;
+    line-height: 1.6;
+}
+
+.notice-link {
+    display: inline-block;
+    margin-top: 8px;
+    padding: 10px 13px;
+    color: white;
+    background: #2563eb;
+    border-radius: 8px;
+    text-decoration: none;
+}
+
+.footer {
+    margin-top: 40px;
+    padding: 25px;
     color: #6b7280;
+    text-align: center;
+}
+
+@media (max-width: 700px) {
+    .statistics {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .card-grid {
+        grid-template-columns: 1fr;
+    }
 }
 </style>
 </head>
@@ -111,1004 +160,1078 @@ td.title {
 <body>
 <div class="container">
 
-    <h1>수도권 공공주택 모집공고</h1>
-    <p>서울·경기 지역의 현재 모집공고를 확인할 수 있습니다.</p>
+    <header class="header">
+        <h1>수도권 청년주택 브리핑</h1>
+        <p>2026-08-16 기준 서울·경기 공공주택 모집정보</p>
+    </header>
 
     
 <a
-    id="excel-download"
-    class="link-button"
-    href="housing_notices.xlsx"
-    download
+    href="housing_map.html"
+    target="_blank"
+    style="
+        display:inline-block;
+        margin:20px 0 5px;
+        padding:12px 15px;
+        color:white;
+        background:#7c3aed;
+        border-radius:9px;
+        text-decoration:none;
+    "
 >
-    Excel 다운로드
+    지도에서 공고 보기
 </a>
-<br><br>
-<div class="card">
-
-        <div class="filters">
-            <button
-                class="region-button active"
-                onclick="selectRegion('전체', this)"
-            >
-                전체
-            </button>
-
-            <button
-                class="region-button"
-                onclick="selectRegion('서울', this)"
-            >
-                서울
-            </button>
-
-            <button
-                class="region-button"
-                onclick="selectRegion('경기', this)"
-            >
-                경기
-            </button>
-
-            <input
-                id="searchInput"
-                type="text"
-                placeholder="공고명 검색"
-                oninput="filterTable()"
-            >
-
-            <select id="statusSelect" onchange="filterTable()">
-                <option value="전체">모든 상태</option>
-                <option value="접수 예정">접수 예정</option>
-                <option value="접수 중">접수 중</option>
-                <option value="마감 임박">마감 임박</option>
-                <option value="오늘 마감">오늘 마감</option>
-            </select>
-
-            <label class="checkbox-area">
-                <input
-                    id="youthOnly"
-                    type="checkbox"
-                    onchange="filterTable()"
-                >
-                청년 관련만
-            </label>
+<div class="statistics">
+        <div class="stat">
+            <strong>21</strong>
+            전체 공고
         </div>
 
-        <p id="resultCount"></p>
+        <div class="stat">
+            <strong>2</strong>
+            서울
+        </div>
 
-        <div class="table-area">
-            <table id="noticeTable">
-                <thead>
-                    <tr>
-                        <th>지역</th>
-                        <th>공고명</th>
-                        <th>주택 유형</th>
-                        <th>접수 시작</th>
-                        <th>접수 마감</th>
-                        <th>D-Day</th>
-                        <th>상태</th>
-                        <th>대상</th>
-                        <th>공고문</th>
-                    </tr>
-                </thead>
+        <div class="stat">
+            <strong>19</strong>
+            경기
+        </div>
 
-                <tbody>
-                    
-    <tr
-        data-region="경기"
-        data-status="접수 예정"
-        data-target="청년 관련"
-    >
-        <td>경기</td>
-        <td class="title">파주시 행복주택 예비입주자 모집공고(26.08.07)</td>
-        <td>행복주택</td>
-        <td>2026-08-18</td>
-        <td>2026-08-19</td>
-        <td>D-3</td>
-        <td>접수 예정</td>
-        <td>청년 관련</td>
-        <td><a class="link-button" href="https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020512&amp;ccrCnntSysDsCd=03&amp;uppAisTpCd=06&amp;aisTpCd=10&amp;mi=1026" target="_blank">원문 보기</a></td>
-    </tr>
-    
-    <tr
-        data-region="경기"
-        data-status="접수 예정"
-        data-target="청년 관련"
-    >
-        <td>경기</td>
-        <td class="title">파주시 행복주택 예비입주자 모집공고(26.08.07)</td>
-        <td>행복주택</td>
-        <td>2026-08-18</td>
-        <td>2026-08-19</td>
-        <td>D-3</td>
-        <td>접수 예정</td>
-        <td>청년 관련</td>
-        <td><a class="link-button" href="https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020512&amp;ccrCnntSysDsCd=03&amp;uppAisTpCd=06&amp;aisTpCd=10&amp;mi=1026" target="_blank">원문 보기</a></td>
-    </tr>
-    
-    <tr
-        data-region="경기"
-        data-status="접수 예정"
-        data-target="청년 관련"
-    >
-        <td>경기</td>
-        <td class="title">파주시 행복주택 예비입주자 모집공고(26.08.07)</td>
-        <td>행복주택</td>
-        <td>2026-08-18</td>
-        <td>2026-08-19</td>
-        <td>D-3</td>
-        <td>접수 예정</td>
-        <td>청년 관련</td>
-        <td><a class="link-button" href="https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020512&amp;ccrCnntSysDsCd=03&amp;uppAisTpCd=06&amp;aisTpCd=10&amp;mi=1026" target="_blank">원문 보기</a></td>
-    </tr>
-    
-    <tr
-        data-region="경기"
-        data-status="접수 예정"
-        data-target="청년 관련"
-    >
-        <td>경기</td>
-        <td class="title">파주시 행복주택 예비입주자 모집공고(26.08.07)</td>
-        <td>행복주택</td>
-        <td>2026-08-18</td>
-        <td>2026-08-19</td>
-        <td>D-3</td>
-        <td>접수 예정</td>
-        <td>청년 관련</td>
-        <td><a class="link-button" href="https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020512&amp;ccrCnntSysDsCd=03&amp;uppAisTpCd=06&amp;aisTpCd=10&amp;mi=1026" target="_blank">원문 보기</a></td>
-    </tr>
-    
-    <tr
-        data-region="경기"
-        data-status="접수 예정"
-        data-target="청년 관련"
-    >
-        <td>경기</td>
-        <td class="title">평택시 지역 행복주택 입주자격완화[선계약후검증] 예비입주자 모집(2026.08.05)</td>
-        <td>행복주택</td>
-        <td>2026-08-18</td>
-        <td>2026-08-19</td>
-        <td>D-3</td>
-        <td>접수 예정</td>
-        <td>청년 관련</td>
-        <td><a class="link-button" href="https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020492&amp;ccrCnntSysDsCd=03&amp;uppAisTpCd=06&amp;aisTpCd=10&amp;mi=1026" target="_blank">원문 보기</a></td>
-    </tr>
-    
-    <tr
-        data-region="경기"
-        data-status="접수 예정"
-        data-target="청년 관련"
-    >
-        <td>경기</td>
-        <td class="title">파주시 행복주택 예비입주자 모집공고(26.08.07)</td>
-        <td>행복주택</td>
-        <td>2026-08-18</td>
-        <td>2026-08-19</td>
-        <td>D-3</td>
-        <td>접수 예정</td>
-        <td>청년 관련</td>
-        <td><a class="link-button" href="https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020512&amp;ccrCnntSysDsCd=03&amp;uppAisTpCd=06&amp;aisTpCd=10&amp;mi=1026" target="_blank">원문 보기</a></td>
-    </tr>
-    
-    <tr
-        data-region="경기"
-        data-status="접수 예정"
-        data-target="청년 관련"
-    >
-        <td>경기</td>
-        <td class="title">평택시 지역 행복주택 입주자격완화[선계약후검증] 예비입주자 모집(2026.08.05)</td>
-        <td>행복주택</td>
-        <td>2026-08-18</td>
-        <td>2026-08-19</td>
-        <td>D-3</td>
-        <td>접수 예정</td>
-        <td>청년 관련</td>
-        <td><a class="link-button" href="https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020492&amp;ccrCnntSysDsCd=03&amp;uppAisTpCd=06&amp;aisTpCd=10&amp;mi=1026" target="_blank">원문 보기</a></td>
-    </tr>
-    
-    <tr
-        data-region="경기"
-        data-status="접수 예정"
-        data-target="청년 관련"
-    >
-        <td>경기</td>
-        <td class="title">평택시 지역 행복주택 입주자격완화[선계약후검증] 예비입주자 모집(2026.08.05)</td>
-        <td>행복주택</td>
-        <td>2026-08-18</td>
-        <td>2026-08-19</td>
-        <td>D-3</td>
-        <td>접수 예정</td>
-        <td>청년 관련</td>
-        <td><a class="link-button" href="https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020492&amp;ccrCnntSysDsCd=03&amp;uppAisTpCd=06&amp;aisTpCd=10&amp;mi=1026" target="_blank">원문 보기</a></td>
-    </tr>
-    
-    <tr
-        data-region="경기"
-        data-status="접수 예정"
-        data-target="청년 관련"
-    >
-        <td>경기</td>
-        <td class="title">평택시 지역 행복주택 입주자격완화[선계약후검증] 예비입주자 모집(2026.08.05)</td>
-        <td>행복주택</td>
-        <td>2026-08-18</td>
-        <td>2026-08-19</td>
-        <td>D-3</td>
-        <td>접수 예정</td>
-        <td>청년 관련</td>
-        <td><a class="link-button" href="https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020492&amp;ccrCnntSysDsCd=03&amp;uppAisTpCd=06&amp;aisTpCd=10&amp;mi=1026" target="_blank">원문 보기</a></td>
-    </tr>
-    
-    <tr
-        data-region="경기"
-        data-status="접수 예정"
-        data-target="청년 관련"
-    >
-        <td>경기</td>
-        <td class="title">파주시 행복주택 예비입주자 모집공고(26.08.07)</td>
-        <td>행복주택</td>
-        <td>2026-08-18</td>
-        <td>2026-08-19</td>
-        <td>D-3</td>
-        <td>접수 예정</td>
-        <td>청년 관련</td>
-        <td><a class="link-button" href="https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020512&amp;ccrCnntSysDsCd=03&amp;uppAisTpCd=06&amp;aisTpCd=10&amp;mi=1026" target="_blank">원문 보기</a></td>
-    </tr>
-    
-    <tr
-        data-region="경기"
-        data-status="접수 예정"
-        data-target="청년 관련"
-    >
-        <td>경기</td>
-        <td class="title">구리,남양주시 행복주택 예비입주자모집(26.08.05공고)</td>
-        <td>행복주택</td>
-        <td>2026-08-18</td>
-        <td>2026-08-20</td>
-        <td>D-4</td>
-        <td>접수 예정</td>
-        <td>청년 관련</td>
-        <td><a class="link-button" href="https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020519&amp;ccrCnntSysDsCd=03&amp;uppAisTpCd=06&amp;aisTpCd=10&amp;mi=1026" target="_blank">원문 보기</a></td>
-    </tr>
-    
-    <tr
-        data-region="경기"
-        data-status="접수 예정"
-        data-target="청년 관련"
-    >
-        <td>경기</td>
-        <td class="title">구리,남양주시 행복주택 예비입주자모집(26.08.05공고)</td>
-        <td>행복주택</td>
-        <td>2026-08-18</td>
-        <td>2026-08-20</td>
-        <td>D-4</td>
-        <td>접수 예정</td>
-        <td>청년 관련</td>
-        <td><a class="link-button" href="https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020519&amp;ccrCnntSysDsCd=03&amp;uppAisTpCd=06&amp;aisTpCd=10&amp;mi=1026" target="_blank">원문 보기</a></td>
-    </tr>
-    
-    <tr
-        data-region="경기"
-        data-status="접수 예정"
-        data-target="청년 관련"
-    >
-        <td>경기</td>
-        <td class="title">구리,남양주시 행복주택 예비입주자모집(26.08.05공고)</td>
-        <td>행복주택</td>
-        <td>2026-08-18</td>
-        <td>2026-08-20</td>
-        <td>D-4</td>
-        <td>접수 예정</td>
-        <td>청년 관련</td>
-        <td><a class="link-button" href="https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020519&amp;ccrCnntSysDsCd=03&amp;uppAisTpCd=06&amp;aisTpCd=10&amp;mi=1026" target="_blank">원문 보기</a></td>
-    </tr>
-    
-    <tr
-        data-region="경기"
-        data-status="접수 예정"
-        data-target="청년 관련"
-    >
-        <td>경기</td>
-        <td class="title">[청년신혼부부매입임대리츠]_경기남부지역 예비입주자 모집</td>
-        <td>매입임대</td>
-        <td>2026-08-18</td>
-        <td>2026-08-20</td>
-        <td>D-4</td>
-        <td>접수 예정</td>
-        <td>청년 관련</td>
-        <td><a class="link-button" href="https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020480&amp;ccrCnntSysDsCd=03&amp;uppAisTpCd=13&amp;aisTpCd=26&amp;mi=1026" target="_blank">원문 보기</a></td>
-    </tr>
-    
-    <tr
-        data-region="경기"
-        data-status="접수 예정"
-        data-target="청년 관련"
-    >
-        <td>경기</td>
-        <td class="title">김포시 행복주택 입주자격완화 예비입주자 모집(26.08.06.)</td>
-        <td>행복주택</td>
-        <td>2026-08-18</td>
-        <td>2026-08-20</td>
-        <td>D-4</td>
-        <td>접수 예정</td>
-        <td>청년 관련</td>
-        <td><a class="link-button" href="https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020525&amp;ccrCnntSysDsCd=03&amp;uppAisTpCd=06&amp;aisTpCd=10&amp;mi=1026" target="_blank">원문 보기</a></td>
-    </tr>
-    
-    <tr
-        data-region="경기"
-        data-status="접수 예정"
-        data-target="청년 관련"
-    >
-        <td>경기</td>
-        <td class="title">김포시 행복주택 입주자격완화 예비입주자 모집(26.08.06.)</td>
-        <td>행복주택</td>
-        <td>2026-08-18</td>
-        <td>2026-08-20</td>
-        <td>D-4</td>
-        <td>접수 예정</td>
-        <td>청년 관련</td>
-        <td><a class="link-button" href="https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020525&amp;ccrCnntSysDsCd=03&amp;uppAisTpCd=06&amp;aisTpCd=10&amp;mi=1026" target="_blank">원문 보기</a></td>
-    </tr>
-    
-    <tr
-        data-region="경기"
-        data-status="접수 예정"
-        data-target="청년 관련"
-    >
-        <td>경기</td>
-        <td class="title">[청년신혼부부매입임대리츠]_경기남부지역 예비입주자 모집</td>
-        <td>매입임대</td>
-        <td>2026-08-18</td>
-        <td>2026-08-20</td>
-        <td>D-4</td>
-        <td>접수 예정</td>
-        <td>청년 관련</td>
-        <td><a class="link-button" href="https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020480&amp;ccrCnntSysDsCd=03&amp;uppAisTpCd=13&amp;aisTpCd=26&amp;mi=1026" target="_blank">원문 보기</a></td>
-    </tr>
-    
-    <tr
-        data-region="경기"
-        data-status="접수 예정"
-        data-target="청년 관련"
-    >
-        <td>경기</td>
-        <td class="title">구리,남양주시 행복주택 예비입주자모집(26.08.05공고)</td>
-        <td>행복주택</td>
-        <td>2026-08-18</td>
-        <td>2026-08-20</td>
-        <td>D-4</td>
-        <td>접수 예정</td>
-        <td>청년 관련</td>
-        <td><a class="link-button" href="https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020519&amp;ccrCnntSysDsCd=03&amp;uppAisTpCd=06&amp;aisTpCd=10&amp;mi=1026" target="_blank">원문 보기</a></td>
-    </tr>
-    
-    <tr
-        data-region="경기"
-        data-status="접수 예정"
-        data-target="청년 관련"
-    >
-        <td>경기</td>
-        <td class="title">남양주 장현5 2BL 행복주택 예비입주자 입주자격완화 모집(2026.08.05.공고)</td>
-        <td>행복주택</td>
-        <td>2026-08-18</td>
-        <td>2026-08-20</td>
-        <td>D-4</td>
-        <td>접수 예정</td>
-        <td>청년 관련</td>
-        <td><a class="link-button" href="https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020521&amp;ccrCnntSysDsCd=03&amp;uppAisTpCd=06&amp;aisTpCd=10&amp;mi=1026" target="_blank">원문 보기</a></td>
-    </tr>
-    
-    <tr
-        data-region="경기"
-        data-status="접수 예정"
-        data-target="청년 관련"
-    >
-        <td>경기</td>
-        <td class="title">[청년신혼부부매입임대리츠]_경기북부지역 입주자 모집</td>
-        <td>매입임대</td>
-        <td>2026-08-18</td>
-        <td>2026-08-20</td>
-        <td>D-4</td>
-        <td>접수 예정</td>
-        <td>청년 관련</td>
-        <td><a class="link-button" href="https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020487&amp;ccrCnntSysDsCd=03&amp;uppAisTpCd=13&amp;aisTpCd=26&amp;mi=1026" target="_blank">원문 보기</a></td>
-    </tr>
-    
-    <tr
-        data-region="경기"
-        data-status="접수 예정"
-        data-target="청년 관련"
-    >
-        <td>경기</td>
-        <td class="title">김포시 행복주택 입주자격완화 예비입주자 모집(26.08.06.)</td>
-        <td>행복주택</td>
-        <td>2026-08-18</td>
-        <td>2026-08-20</td>
-        <td>D-4</td>
-        <td>접수 예정</td>
-        <td>청년 관련</td>
-        <td><a class="link-button" href="https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020525&amp;ccrCnntSysDsCd=03&amp;uppAisTpCd=06&amp;aisTpCd=10&amp;mi=1026" target="_blank">원문 보기</a></td>
-    </tr>
-    
-    <tr
-        data-region="경기"
-        data-status="접수 예정"
-        data-target="청년 관련"
-    >
-        <td>경기</td>
-        <td class="title">구리,남양주시 행복주택 예비입주자모집(26.08.05공고)</td>
-        <td>행복주택</td>
-        <td>2026-08-18</td>
-        <td>2026-08-20</td>
-        <td>D-4</td>
-        <td>접수 예정</td>
-        <td>청년 관련</td>
-        <td><a class="link-button" href="https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020536&amp;ccrCnntSysDsCd=03&amp;uppAisTpCd=06&amp;aisTpCd=10&amp;mi=1026" target="_blank">원문 보기</a></td>
-    </tr>
-    
-    <tr
-        data-region="경기"
-        data-status="접수 예정"
-        data-target="청년 관련"
-    >
-        <td>경기</td>
-        <td class="title">[청년신혼부부매입임대리츠]_경기남부지역 예비입주자 모집</td>
-        <td>매입임대</td>
-        <td>2026-08-18</td>
-        <td>2026-08-20</td>
-        <td>D-4</td>
-        <td>접수 예정</td>
-        <td>청년 관련</td>
-        <td><a class="link-button" href="https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020480&amp;ccrCnntSysDsCd=03&amp;uppAisTpCd=13&amp;aisTpCd=26&amp;mi=1026" target="_blank">원문 보기</a></td>
-    </tr>
-    
-    <tr
-        data-region="경기"
-        data-status="접수 예정"
-        data-target="청년 관련"
-    >
-        <td>경기</td>
-        <td class="title">남양주 장현5 2BL 행복주택 예비입주자 입주자격완화 모집(2026.08.05.공고)</td>
-        <td>행복주택</td>
-        <td>2026-08-18</td>
-        <td>2026-08-20</td>
-        <td>D-4</td>
-        <td>접수 예정</td>
-        <td>청년 관련</td>
-        <td><a class="link-button" href="https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020537&amp;ccrCnntSysDsCd=03&amp;uppAisTpCd=06&amp;aisTpCd=10&amp;mi=1026" target="_blank">원문 보기</a></td>
-    </tr>
-    
-    <tr
-        data-region="경기"
-        data-status="접수 예정"
-        data-target="청년 관련"
-    >
-        <td>경기</td>
-        <td class="title">[청년신혼부부매입임대리츠]_경기남부지역 예비입주자 모집</td>
-        <td>매입임대</td>
-        <td>2026-08-18</td>
-        <td>2026-08-20</td>
-        <td>D-4</td>
-        <td>접수 예정</td>
-        <td>청년 관련</td>
-        <td><a class="link-button" href="https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020480&amp;ccrCnntSysDsCd=03&amp;uppAisTpCd=13&amp;aisTpCd=26&amp;mi=1026" target="_blank">원문 보기</a></td>
-    </tr>
-    
-    <tr
-        data-region="경기"
-        data-status="접수 예정"
-        data-target="청년 관련"
-    >
-        <td>경기</td>
-        <td class="title">구리,남양주시 행복주택 예비입주자모집(26.08.05공고)</td>
-        <td>행복주택</td>
-        <td>2026-08-18</td>
-        <td>2026-08-20</td>
-        <td>D-4</td>
-        <td>접수 예정</td>
-        <td>청년 관련</td>
-        <td><a class="link-button" href="https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020536&amp;ccrCnntSysDsCd=03&amp;uppAisTpCd=06&amp;aisTpCd=10&amp;mi=1026" target="_blank">원문 보기</a></td>
-    </tr>
-    
-    <tr
-        data-region="경기"
-        data-status="접수 예정"
-        data-target="청년 관련"
-    >
-        <td>경기</td>
-        <td class="title">구리,남양주시 행복주택 예비입주자모집(26.08.05공고)</td>
-        <td>행복주택</td>
-        <td>2026-08-18</td>
-        <td>2026-08-20</td>
-        <td>D-4</td>
-        <td>접수 예정</td>
-        <td>청년 관련</td>
-        <td><a class="link-button" href="https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020536&amp;ccrCnntSysDsCd=03&amp;uppAisTpCd=06&amp;aisTpCd=10&amp;mi=1026" target="_blank">원문 보기</a></td>
-    </tr>
-    
-    <tr
-        data-region="경기"
-        data-status="접수 예정"
-        data-target="청년 관련"
-    >
-        <td>경기</td>
-        <td class="title">구리,남양주시 행복주택 예비입주자모집(26.08.05공고)</td>
-        <td>행복주택</td>
-        <td>2026-08-18</td>
-        <td>2026-08-20</td>
-        <td>D-4</td>
-        <td>접수 예정</td>
-        <td>청년 관련</td>
-        <td><a class="link-button" href="https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020536&amp;ccrCnntSysDsCd=03&amp;uppAisTpCd=06&amp;aisTpCd=10&amp;mi=1026" target="_blank">원문 보기</a></td>
-    </tr>
-    
-    <tr
-        data-region="경기"
-        data-status="접수 예정"
-        data-target="청년 관련"
-    >
-        <td>경기</td>
-        <td class="title">의왕고천A-1BL[리츠]·안양명학A-1BL 행복주택 예비입주자 모집</td>
-        <td>행복주택</td>
-        <td>2026-08-24</td>
-        <td>2026-08-25</td>
-        <td>D-9</td>
-        <td>접수 예정</td>
-        <td>청년 관련</td>
-        <td><a class="link-button" href="https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020552&amp;ccrCnntSysDsCd=03&amp;uppAisTpCd=06&amp;aisTpCd=10&amp;mi=1026" target="_blank">원문 보기</a></td>
-    </tr>
-    
-    <tr
-        data-region="경기"
-        data-status="접수 예정"
-        data-target="청년 관련"
-    >
-        <td>경기</td>
-        <td class="title">의왕고천A-1BL[리츠]·안양명학A-1BL 행복주택 예비입주자 모집</td>
-        <td>행복주택</td>
-        <td>2026-08-24</td>
-        <td>2026-08-25</td>
-        <td>D-9</td>
-        <td>접수 예정</td>
-        <td>청년 관련</td>
-        <td><a class="link-button" href="https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020552&amp;ccrCnntSysDsCd=03&amp;uppAisTpCd=06&amp;aisTpCd=10&amp;mi=1026" target="_blank">원문 보기</a></td>
-    </tr>
-    
-    <tr
-        data-region="경기"
-        data-status="접수 예정"
-        data-target="청년 관련"
-    >
-        <td>경기</td>
-        <td class="title">성남금토 A-4블록 신혼희망타운 행복주택 입주자 모집공고</td>
-        <td>행복주택</td>
-        <td>2026-08-24</td>
-        <td>2026-08-26</td>
-        <td>D-10</td>
-        <td>접수 예정</td>
-        <td>청년 관련</td>
-        <td><a class="link-button" href="https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020534&amp;ccrCnntSysDsCd=03&amp;uppAisTpCd=39&amp;aisTpCd=42&amp;mi=1026" target="_blank">원문 보기</a></td>
-    </tr>
-    
-    <tr
-        data-region="경기"
-        data-status="접수 예정"
-        data-target="청년 관련"
-    >
-        <td>경기</td>
-        <td class="title">[수원시]수원시 역세권 새빛 청년존(Zone) 4호 및 1호 예비입주자 모집공고</td>
-        <td>매입임대</td>
-        <td>2026-08-24</td>
-        <td>2026-08-28</td>
-        <td>D-12</td>
-        <td>접수 예정</td>
-        <td>청년 관련</td>
-        <td><a class="link-button" href="https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020560&amp;ccrCnntSysDsCd=03&amp;uppAisTpCd=13&amp;aisTpCd=26&amp;mi=1026" target="_blank">원문 보기</a></td>
-    </tr>
-    
-    <tr
-        data-region="경기"
-        data-status="접수 예정"
-        data-target="청년 관련"
-    >
-        <td>경기</td>
-        <td class="title">화성시 행복주택 입주자격완화 예비입주자 모집(26.08.05)</td>
-        <td>행복주택</td>
-        <td>2026-08-27</td>
-        <td>2026-08-28</td>
-        <td>D-12</td>
-        <td>접수 예정</td>
-        <td>청년 관련</td>
-        <td><a class="link-button" href="https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020511&amp;ccrCnntSysDsCd=03&amp;uppAisTpCd=06&amp;aisTpCd=10&amp;mi=1026" target="_blank">원문 보기</a></td>
-    </tr>
-    
-    <tr
-        data-region="경기"
-        data-status="접수 예정"
-        data-target="청년 관련"
-    >
-        <td>경기</td>
-        <td class="title">남양주진접2 A-4BL 신혼희망타운 행복주택 최초 입주자 모집공고(‘26.08.13)</td>
-        <td>행복주택</td>
-        <td>2026-08-25</td>
-        <td>2026-08-28</td>
-        <td>D-12</td>
-        <td>접수 예정</td>
-        <td>청년 관련</td>
-        <td><a class="link-button" href="https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020545&amp;ccrCnntSysDsCd=03&amp;uppAisTpCd=39&amp;aisTpCd=42&amp;mi=1026" target="_blank">원문 보기</a></td>
-    </tr>
-    
-    <tr
-        data-region="경기"
-        data-status="접수 예정"
-        data-target="청년 관련"
-    >
-        <td>경기</td>
-        <td class="title">화성시 행복주택 입주자격완화 예비입주자 모집(26.08.05)</td>
-        <td>행복주택</td>
-        <td>2026-08-27</td>
-        <td>2026-08-28</td>
-        <td>D-12</td>
-        <td>접수 예정</td>
-        <td>청년 관련</td>
-        <td><a class="link-button" href="https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020511&amp;ccrCnntSysDsCd=03&amp;uppAisTpCd=06&amp;aisTpCd=10&amp;mi=1026" target="_blank">원문 보기</a></td>
-    </tr>
-    
-    <tr
-        data-region="경기"
-        data-status="접수 예정"
-        data-target="청년 관련"
-    >
-        <td>경기</td>
-        <td class="title">화성시 행복주택 입주자격완화 예비입주자 모집(26.08.05)</td>
-        <td>행복주택</td>
-        <td>2026-08-27</td>
-        <td>2026-08-28</td>
-        <td>D-12</td>
-        <td>접수 예정</td>
-        <td>청년 관련</td>
-        <td><a class="link-button" href="https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020511&amp;ccrCnntSysDsCd=03&amp;uppAisTpCd=06&amp;aisTpCd=10&amp;mi=1026" target="_blank">원문 보기</a></td>
-    </tr>
-    
-    <tr
-        data-region="경기"
-        data-status="접수 예정"
-        data-target="청년 관련"
-    >
-        <td>경기</td>
-        <td class="title">[수원시]수원시 역세권 새빛 청년존(Zone) 4호 및 1호 예비입주자 모집공고</td>
-        <td>매입임대</td>
-        <td>2026-08-24</td>
-        <td>2026-08-28</td>
-        <td>D-12</td>
-        <td>접수 예정</td>
-        <td>청년 관련</td>
-        <td><a class="link-button" href="https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020560&amp;ccrCnntSysDsCd=03&amp;uppAisTpCd=13&amp;aisTpCd=26&amp;mi=1026" target="_blank">원문 보기</a></td>
-    </tr>
-    
-    <tr
-        data-region="경기"
-        data-status="접수 예정"
-        data-target="청년 관련"
-    >
-        <td>경기</td>
-        <td class="title">화성시 행복주택 입주자격완화 예비입주자 모집(26.08.05)</td>
-        <td>행복주택</td>
-        <td>2026-08-27</td>
-        <td>2026-08-28</td>
-        <td>D-12</td>
-        <td>접수 예정</td>
-        <td>청년 관련</td>
-        <td><a class="link-button" href="https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020511&amp;ccrCnntSysDsCd=03&amp;uppAisTpCd=06&amp;aisTpCd=10&amp;mi=1026" target="_blank">원문 보기</a></td>
-    </tr>
-    
-    <tr
-        data-region="경기"
-        data-status="접수 중"
-        data-target="청년 관련"
-    >
-        <td>경기</td>
-        <td class="title">2026년 신혼·신생아 전세임대 I 입주자 수시모집 공고</td>
-        <td>전세임대</td>
-        <td>2026-03-24</td>
-        <td>2026-12-31</td>
-        <td>D-137</td>
-        <td>접수 중</td>
-        <td>청년 관련</td>
-        <td><a class="link-button" href="https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300019550&amp;ccrCnntSysDsCd=03&amp;uppAisTpCd=13&amp;aisTpCd=17&amp;mi=1026" target="_blank">원문 보기</a></td>
-    </tr>
-    
-    <tr
-        data-region="서울"
-        data-status="접수 중"
-        data-target="청년 관련"
-    >
-        <td>서울</td>
-        <td class="title">2026년 청년 전세임대 1순위 입주자 수시모집</td>
-        <td>전세임대</td>
-        <td>2026-02-24</td>
-        <td>2026-12-31</td>
-        <td>D-137</td>
-        <td>접수 중</td>
-        <td>청년 관련</td>
-        <td><a class="link-button" href="https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300019376&amp;ccrCnntSysDsCd=03&amp;uppAisTpCd=13&amp;aisTpCd=17&amp;mi=1026" target="_blank">원문 보기</a></td>
-    </tr>
-    
-    <tr
-        data-region="서울"
-        data-status="접수 중"
-        data-target="청년 관련"
-    >
-        <td>서울</td>
-        <td class="title">2026년 신혼·신생아 전세임대Ⅱ 입주자 수시모집 공고</td>
-        <td>전세임대</td>
-        <td>2026-03-24</td>
-        <td>2026-12-31</td>
-        <td>D-137</td>
-        <td>접수 중</td>
-        <td>청년 관련</td>
-        <td><a class="link-button" href="https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300019551&amp;ccrCnntSysDsCd=03&amp;uppAisTpCd=13&amp;aisTpCd=17&amp;mi=1026" target="_blank">원문 보기</a></td>
-    </tr>
-    
-    <tr
-        data-region="서울"
-        data-status="접수 중"
-        data-target="청년 관련"
-    >
-        <td>서울</td>
-        <td class="title">2026년 신혼·신생아 전세임대 I 입주자 수시모집 공고</td>
-        <td>전세임대</td>
-        <td>2026-03-24</td>
-        <td>2026-12-31</td>
-        <td>D-137</td>
-        <td>접수 중</td>
-        <td>청년 관련</td>
-        <td><a class="link-button" href="https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300019550&amp;ccrCnntSysDsCd=03&amp;uppAisTpCd=13&amp;aisTpCd=17&amp;mi=1026" target="_blank">원문 보기</a></td>
-    </tr>
-    
-    <tr
-        data-region="경기"
-        data-status="접수 중"
-        data-target="청년 관련"
-    >
-        <td>경기</td>
-        <td class="title">2026년 신혼·신생아 전세임대Ⅱ 입주자 수시모집 공고</td>
-        <td>전세임대</td>
-        <td>2026-03-24</td>
-        <td>2026-12-31</td>
-        <td>D-137</td>
-        <td>접수 중</td>
-        <td>청년 관련</td>
-        <td><a class="link-button" href="https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300019551&amp;ccrCnntSysDsCd=03&amp;uppAisTpCd=13&amp;aisTpCd=17&amp;mi=1026" target="_blank">원문 보기</a></td>
-    </tr>
-    
-    <tr
-        data-region="경기"
-        data-status="접수 중"
-        data-target="청년 관련"
-    >
-        <td>경기</td>
-        <td class="title">2026년 청년 전세임대 1순위 입주자 수시모집</td>
-        <td>전세임대</td>
-        <td>2026-02-24</td>
-        <td>2026-12-31</td>
-        <td>D-137</td>
-        <td>접수 중</td>
-        <td>청년 관련</td>
-        <td><a class="link-button" href="https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300019376&amp;ccrCnntSysDsCd=03&amp;uppAisTpCd=13&amp;aisTpCd=17&amp;mi=1026" target="_blank">원문 보기</a></td>
-    </tr>
-    
-    <tr
-        data-region="경기"
-        data-status="마감 임박"
-        data-target="일반 공고"
-    >
-        <td>경기</td>
-        <td class="title">장애인 자립특화형 주택 여기가 입주자 모집공고(경기도 김포시)</td>
-        <td>매입임대</td>
-        <td>2026-08-10</td>
-        <td>2026-08-21</td>
-        <td>D-5</td>
-        <td>마감 임박</td>
-        <td>일반 공고</td>
-        <td><a class="link-button" href="https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020539&amp;ccrCnntSysDsCd=03&amp;uppAisTpCd=13&amp;aisTpCd=26&amp;mi=1026" target="_blank">원문 보기</a></td>
-    </tr>
-    
-    <tr
-        data-region="경기"
-        data-status="접수 예정"
-        data-target="일반 공고"
-    >
-        <td>경기</td>
-        <td class="title">화성시 동탄지역 영구임대주택 예비입주자 모집(‘26.08.05.)</td>
-        <td>영구임대</td>
-        <td>2026-08-18</td>
-        <td>2026-08-24</td>
-        <td>D-8</td>
-        <td>접수 예정</td>
-        <td>일반 공고</td>
-        <td><a class="link-button" href="https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020515&amp;ccrCnntSysDsCd=03&amp;uppAisTpCd=06&amp;aisTpCd=09&amp;mi=1026" target="_blank">원문 보기</a></td>
-    </tr>
-    
-    <tr
-        data-region="경기"
-        data-status="접수 예정"
-        data-target="일반 공고"
-    >
-        <td>경기</td>
-        <td class="title">화성시 동탄지역 영구임대주택 예비입주자 모집(‘26.08.05.)</td>
-        <td>영구임대</td>
-        <td>2026-08-18</td>
-        <td>2026-08-24</td>
-        <td>D-8</td>
-        <td>접수 예정</td>
-        <td>일반 공고</td>
-        <td><a class="link-button" href="https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020515&amp;ccrCnntSysDsCd=03&amp;uppAisTpCd=06&amp;aisTpCd=09&amp;mi=1026" target="_blank">원문 보기</a></td>
-    </tr>
-    
-    <tr
-        data-region="경기"
-        data-status="접수 예정"
-        data-target="일반 공고"
-    >
-        <td>경기</td>
-        <td class="title">화성시 동탄지역 영구임대주택 예비입주자 모집(‘26.08.05.)</td>
-        <td>영구임대</td>
-        <td>2026-08-18</td>
-        <td>2026-08-24</td>
-        <td>D-8</td>
-        <td>접수 예정</td>
-        <td>일반 공고</td>
-        <td><a class="link-button" href="https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020515&amp;ccrCnntSysDsCd=03&amp;uppAisTpCd=06&amp;aisTpCd=09&amp;mi=1026" target="_blank">원문 보기</a></td>
-    </tr>
-    
-    <tr
-        data-region="경기"
-        data-status="접수 예정"
-        data-target="일반 공고"
-    >
-        <td>경기</td>
-        <td class="title">화성시 동탄지역 영구임대주택 예비입주자 모집(‘26.08.05.)</td>
-        <td>영구임대</td>
-        <td>2026-08-18</td>
-        <td>2026-08-24</td>
-        <td>D-8</td>
-        <td>접수 예정</td>
-        <td>일반 공고</td>
-        <td><a class="link-button" href="https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020515&amp;ccrCnntSysDsCd=03&amp;uppAisTpCd=06&amp;aisTpCd=09&amp;mi=1026" target="_blank">원문 보기</a></td>
-    </tr>
-    
-    <tr
-        data-region="경기"
-        data-status="접수 예정"
-        data-target="일반 공고"
-    >
-        <td>경기</td>
-        <td class="title">이천장호원 B2블록 통합공공임대주택 예비입주자 모집공고</td>
-        <td>통합공공임대</td>
-        <td>2026-08-25</td>
-        <td>2026-08-27</td>
-        <td>D-11</td>
-        <td>접수 예정</td>
-        <td>일반 공고</td>
-        <td><a class="link-button" href="https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020531&amp;ccrCnntSysDsCd=03&amp;uppAisTpCd=06&amp;aisTpCd=48&amp;mi=1026" target="_blank">원문 보기</a></td>
-    </tr>
-    
-    <tr
-        data-region="경기"
-        data-status="접수 중"
-        data-target="일반 공고"
-    >
-        <td>경기</td>
-        <td class="title">2026 다자녀 전세임대 입주자 수시모집 공고</td>
-        <td>전세임대</td>
-        <td>2026-03-24</td>
-        <td>2026-12-31</td>
-        <td>D-137</td>
-        <td>접수 중</td>
-        <td>일반 공고</td>
-        <td><a class="link-button" href="https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300019546&amp;ccrCnntSysDsCd=03&amp;uppAisTpCd=13&amp;aisTpCd=17&amp;mi=1026" target="_blank">원문 보기</a></td>
-    </tr>
-    
-    <tr
-        data-region="서울"
-        data-status="접수 중"
-        data-target="일반 공고"
-    >
-        <td>서울</td>
-        <td class="title">2026 다자녀 전세임대 입주자 수시모집 공고</td>
-        <td>전세임대</td>
-        <td>2026-03-24</td>
-        <td>2026-12-31</td>
-        <td>D-137</td>
-        <td>접수 중</td>
-        <td>일반 공고</td>
-        <td><a class="link-button" href="https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300019546&amp;ccrCnntSysDsCd=03&amp;uppAisTpCd=13&amp;aisTpCd=17&amp;mi=1026" target="_blank">원문 보기</a></td>
-    </tr>
-    
-                </tbody>
-            </table>
+        <div class="stat">
+            <strong>10</strong>
+            마감 임박
         </div>
     </div>
+
+    <div class="controls">
+        <input
+            id="searchInput"
+            type="text"
+            placeholder="공고명 검색"
+            oninput="filterCards()"
+        >
+
+        <select id="regionSelect" onchange="filterCards()">
+            <option value="전체">전체 지역</option>
+            <option value="서울">서울</option>
+            <option value="경기">경기</option>
+        </select>
+
+        <label>
+            <input
+                id="youthOnly"
+                type="checkbox"
+                onchange="filterCards()"
+            >
+            청년 관련만
+        </label>
+
+        <a
+            class="excel-link"
+            href="housing_notices.xlsx"
+            download
+        >
+            Excel 다운로드
+        </a>
+    </div>
+
+    <section class="section">
+        <h2 class="section-title">이번 주 마감 공고</h2>
+
+        <div class="card-grid">
+            
+    <article
+        class="notice-card"
+        data-region="경기"
+        data-target="청년 관련"
+    >
+        <div class="card-top">
+            <span class="region">경기</span>
+            <span class="d-day">D-3</span>
+        </div>
+
+        <h3>파주시 행복주택 예비입주자 모집공고(26.08.07)</h3>
+
+        <div class="notice-info">
+            <p><strong>주택 유형</strong> 행복주택</p>
+            <p><strong>접수 기간</strong> 2026-08-18 ~ 2026-08-19</p>
+            <p><strong>현재 상태</strong> 접수 예정</p>
+            <p><strong>대상 분류</strong> 청년 관련</p>
+        </div>
+
+        
+        <a
+            class="notice-link"
+            href="https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020512&amp;ccrCnntSysDsCd=03&amp;uppAisTpCd=06&amp;aisTpCd=10&amp;mi=1026"
+            target="_blank"
+        >
+            공고문 바로 보기
+        </a>
+        
+    </article>
+    
+    <article
+        class="notice-card"
+        data-region="경기"
+        data-target="청년 관련"
+    >
+        <div class="card-top">
+            <span class="region">경기</span>
+            <span class="d-day">D-3</span>
+        </div>
+
+        <h3>평택시 지역 행복주택 입주자격완화[선계약후검증] 예비입주자 모집(2026.08.05)</h3>
+
+        <div class="notice-info">
+            <p><strong>주택 유형</strong> 행복주택</p>
+            <p><strong>접수 기간</strong> 2026-08-18 ~ 2026-08-19</p>
+            <p><strong>현재 상태</strong> 접수 예정</p>
+            <p><strong>대상 분류</strong> 청년 관련</p>
+        </div>
+
+        
+        <a
+            class="notice-link"
+            href="https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020492&amp;ccrCnntSysDsCd=03&amp;uppAisTpCd=06&amp;aisTpCd=10&amp;mi=1026"
+            target="_blank"
+        >
+            공고문 바로 보기
+        </a>
+        
+    </article>
+    
+    <article
+        class="notice-card"
+        data-region="경기"
+        data-target="청년 관련"
+    >
+        <div class="card-top">
+            <span class="region">경기</span>
+            <span class="d-day">D-4</span>
+        </div>
+
+        <h3>구리,남양주시 행복주택 예비입주자모집(26.08.05공고)</h3>
+
+        <div class="notice-info">
+            <p><strong>주택 유형</strong> 행복주택</p>
+            <p><strong>접수 기간</strong> 2026-08-18 ~ 2026-08-20</p>
+            <p><strong>현재 상태</strong> 접수 예정</p>
+            <p><strong>대상 분류</strong> 청년 관련</p>
+        </div>
+
+        
+        <a
+            class="notice-link"
+            href="https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020519&amp;ccrCnntSysDsCd=03&amp;uppAisTpCd=06&amp;aisTpCd=10&amp;mi=1026"
+            target="_blank"
+        >
+            공고문 바로 보기
+        </a>
+        
+    </article>
+    
+    <article
+        class="notice-card"
+        data-region="경기"
+        data-target="청년 관련"
+    >
+        <div class="card-top">
+            <span class="region">경기</span>
+            <span class="d-day">D-4</span>
+        </div>
+
+        <h3>[청년신혼부부매입임대리츠]_경기남부지역 예비입주자 모집</h3>
+
+        <div class="notice-info">
+            <p><strong>주택 유형</strong> 매입임대</p>
+            <p><strong>접수 기간</strong> 2026-08-18 ~ 2026-08-20</p>
+            <p><strong>현재 상태</strong> 접수 예정</p>
+            <p><strong>대상 분류</strong> 청년 관련</p>
+        </div>
+
+        
+        <a
+            class="notice-link"
+            href="https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020480&amp;ccrCnntSysDsCd=03&amp;uppAisTpCd=13&amp;aisTpCd=26&amp;mi=1026"
+            target="_blank"
+        >
+            공고문 바로 보기
+        </a>
+        
+    </article>
+    
+    <article
+        class="notice-card"
+        data-region="경기"
+        data-target="청년 관련"
+    >
+        <div class="card-top">
+            <span class="region">경기</span>
+            <span class="d-day">D-4</span>
+        </div>
+
+        <h3>김포시 행복주택 입주자격완화 예비입주자 모집(26.08.06.)</h3>
+
+        <div class="notice-info">
+            <p><strong>주택 유형</strong> 행복주택</p>
+            <p><strong>접수 기간</strong> 2026-08-18 ~ 2026-08-20</p>
+            <p><strong>현재 상태</strong> 접수 예정</p>
+            <p><strong>대상 분류</strong> 청년 관련</p>
+        </div>
+
+        
+        <a
+            class="notice-link"
+            href="https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020525&amp;ccrCnntSysDsCd=03&amp;uppAisTpCd=06&amp;aisTpCd=10&amp;mi=1026"
+            target="_blank"
+        >
+            공고문 바로 보기
+        </a>
+        
+    </article>
+    
+    <article
+        class="notice-card"
+        data-region="경기"
+        data-target="청년 관련"
+    >
+        <div class="card-top">
+            <span class="region">경기</span>
+            <span class="d-day">D-4</span>
+        </div>
+
+        <h3>남양주 장현5 2BL 행복주택 예비입주자 입주자격완화 모집(2026.08.05.공고)</h3>
+
+        <div class="notice-info">
+            <p><strong>주택 유형</strong> 행복주택</p>
+            <p><strong>접수 기간</strong> 2026-08-18 ~ 2026-08-20</p>
+            <p><strong>현재 상태</strong> 접수 예정</p>
+            <p><strong>대상 분류</strong> 청년 관련</p>
+        </div>
+
+        
+        <a
+            class="notice-link"
+            href="https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020521&amp;ccrCnntSysDsCd=03&amp;uppAisTpCd=06&amp;aisTpCd=10&amp;mi=1026"
+            target="_blank"
+        >
+            공고문 바로 보기
+        </a>
+        
+    </article>
+    
+    <article
+        class="notice-card"
+        data-region="경기"
+        data-target="청년 관련"
+    >
+        <div class="card-top">
+            <span class="region">경기</span>
+            <span class="d-day">D-4</span>
+        </div>
+
+        <h3>[청년신혼부부매입임대리츠]_경기북부지역 입주자 모집</h3>
+
+        <div class="notice-info">
+            <p><strong>주택 유형</strong> 매입임대</p>
+            <p><strong>접수 기간</strong> 2026-08-18 ~ 2026-08-20</p>
+            <p><strong>현재 상태</strong> 접수 예정</p>
+            <p><strong>대상 분류</strong> 청년 관련</p>
+        </div>
+
+        
+        <a
+            class="notice-link"
+            href="https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020487&amp;ccrCnntSysDsCd=03&amp;uppAisTpCd=13&amp;aisTpCd=26&amp;mi=1026"
+            target="_blank"
+        >
+            공고문 바로 보기
+        </a>
+        
+    </article>
+    
+    <article
+        class="notice-card"
+        data-region="경기"
+        data-target="청년 관련"
+    >
+        <div class="card-top">
+            <span class="region">경기</span>
+            <span class="d-day">D-4</span>
+        </div>
+
+        <h3>구리,남양주시 행복주택 예비입주자모집(26.08.05공고)</h3>
+
+        <div class="notice-info">
+            <p><strong>주택 유형</strong> 행복주택</p>
+            <p><strong>접수 기간</strong> 2026-08-18 ~ 2026-08-20</p>
+            <p><strong>현재 상태</strong> 접수 예정</p>
+            <p><strong>대상 분류</strong> 청년 관련</p>
+        </div>
+
+        
+        <a
+            class="notice-link"
+            href="https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020536&amp;ccrCnntSysDsCd=03&amp;uppAisTpCd=06&amp;aisTpCd=10&amp;mi=1026"
+            target="_blank"
+        >
+            공고문 바로 보기
+        </a>
+        
+    </article>
+    
+    <article
+        class="notice-card"
+        data-region="경기"
+        data-target="청년 관련"
+    >
+        <div class="card-top">
+            <span class="region">경기</span>
+            <span class="d-day">D-4</span>
+        </div>
+
+        <h3>남양주 장현5 2BL 행복주택 예비입주자 입주자격완화 모집(2026.08.05.공고)</h3>
+
+        <div class="notice-info">
+            <p><strong>주택 유형</strong> 행복주택</p>
+            <p><strong>접수 기간</strong> 2026-08-18 ~ 2026-08-20</p>
+            <p><strong>현재 상태</strong> 접수 예정</p>
+            <p><strong>대상 분류</strong> 청년 관련</p>
+        </div>
+
+        
+        <a
+            class="notice-link"
+            href="https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020537&amp;ccrCnntSysDsCd=03&amp;uppAisTpCd=06&amp;aisTpCd=10&amp;mi=1026"
+            target="_blank"
+        >
+            공고문 바로 보기
+        </a>
+        
+    </article>
+    
+    <article
+        class="notice-card"
+        data-region="경기"
+        data-target="일반 공고"
+    >
+        <div class="card-top">
+            <span class="region">경기</span>
+            <span class="d-day">D-5</span>
+        </div>
+
+        <h3>장애인 자립특화형 주택 여기가 입주자 모집공고(경기도 김포시)</h3>
+
+        <div class="notice-info">
+            <p><strong>주택 유형</strong> 매입임대</p>
+            <p><strong>접수 기간</strong> 2026-08-10 ~ 2026-08-21</p>
+            <p><strong>현재 상태</strong> 마감 임박</p>
+            <p><strong>대상 분류</strong> 일반 공고</p>
+        </div>
+
+        
+        <a
+            class="notice-link"
+            href="https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020539&amp;ccrCnntSysDsCd=03&amp;uppAisTpCd=13&amp;aisTpCd=26&amp;mi=1026"
+            target="_blank"
+        >
+            공고문 바로 보기
+        </a>
+        
+    </article>
+    
+        </div>
+    </section>
+
+    <section class="section">
+        <h2 class="section-title">서울 모집공고</h2>
+
+        <div class="card-grid">
+            
+    <article
+        class="notice-card"
+        data-region="서울"
+        data-target="청년 관련"
+    >
+        <div class="card-top">
+            <span class="region">서울</span>
+            <span class="d-day">D-137</span>
+        </div>
+
+        <h3>2026년 청년 전세임대 1순위 입주자 수시모집</h3>
+
+        <div class="notice-info">
+            <p><strong>주택 유형</strong> 전세임대</p>
+            <p><strong>접수 기간</strong> 2026-02-24 ~ 2026-12-31</p>
+            <p><strong>현재 상태</strong> 접수 중</p>
+            <p><strong>대상 분류</strong> 청년 관련</p>
+        </div>
+
+        
+        <a
+            class="notice-link"
+            href="https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300019376&amp;ccrCnntSysDsCd=03&amp;uppAisTpCd=13&amp;aisTpCd=17&amp;mi=1026"
+            target="_blank"
+        >
+            공고문 바로 보기
+        </a>
+        
+    </article>
+    
+    <article
+        class="notice-card"
+        data-region="서울"
+        data-target="청년 관련"
+    >
+        <div class="card-top">
+            <span class="region">서울</span>
+            <span class="d-day">D-137</span>
+        </div>
+
+        <h3>2026년 신혼·신생아 전세임대Ⅱ 입주자 수시모집 공고</h3>
+
+        <div class="notice-info">
+            <p><strong>주택 유형</strong> 전세임대</p>
+            <p><strong>접수 기간</strong> 2026-03-24 ~ 2026-12-31</p>
+            <p><strong>현재 상태</strong> 접수 중</p>
+            <p><strong>대상 분류</strong> 청년 관련</p>
+        </div>
+
+        
+        <a
+            class="notice-link"
+            href="https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300019551&amp;ccrCnntSysDsCd=03&amp;uppAisTpCd=13&amp;aisTpCd=17&amp;mi=1026"
+            target="_blank"
+        >
+            공고문 바로 보기
+        </a>
+        
+    </article>
+    
+        </div>
+    </section>
+
+    <section class="section">
+        <h2 class="section-title">경기 모집공고</h2>
+
+        <div class="card-grid">
+            
+    <article
+        class="notice-card"
+        data-region="경기"
+        data-target="청년 관련"
+    >
+        <div class="card-top">
+            <span class="region">경기</span>
+            <span class="d-day">D-3</span>
+        </div>
+
+        <h3>파주시 행복주택 예비입주자 모집공고(26.08.07)</h3>
+
+        <div class="notice-info">
+            <p><strong>주택 유형</strong> 행복주택</p>
+            <p><strong>접수 기간</strong> 2026-08-18 ~ 2026-08-19</p>
+            <p><strong>현재 상태</strong> 접수 예정</p>
+            <p><strong>대상 분류</strong> 청년 관련</p>
+        </div>
+
+        
+        <a
+            class="notice-link"
+            href="https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020512&amp;ccrCnntSysDsCd=03&amp;uppAisTpCd=06&amp;aisTpCd=10&amp;mi=1026"
+            target="_blank"
+        >
+            공고문 바로 보기
+        </a>
+        
+    </article>
+    
+    <article
+        class="notice-card"
+        data-region="경기"
+        data-target="청년 관련"
+    >
+        <div class="card-top">
+            <span class="region">경기</span>
+            <span class="d-day">D-3</span>
+        </div>
+
+        <h3>평택시 지역 행복주택 입주자격완화[선계약후검증] 예비입주자 모집(2026.08.05)</h3>
+
+        <div class="notice-info">
+            <p><strong>주택 유형</strong> 행복주택</p>
+            <p><strong>접수 기간</strong> 2026-08-18 ~ 2026-08-19</p>
+            <p><strong>현재 상태</strong> 접수 예정</p>
+            <p><strong>대상 분류</strong> 청년 관련</p>
+        </div>
+
+        
+        <a
+            class="notice-link"
+            href="https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020492&amp;ccrCnntSysDsCd=03&amp;uppAisTpCd=06&amp;aisTpCd=10&amp;mi=1026"
+            target="_blank"
+        >
+            공고문 바로 보기
+        </a>
+        
+    </article>
+    
+    <article
+        class="notice-card"
+        data-region="경기"
+        data-target="청년 관련"
+    >
+        <div class="card-top">
+            <span class="region">경기</span>
+            <span class="d-day">D-4</span>
+        </div>
+
+        <h3>구리,남양주시 행복주택 예비입주자모집(26.08.05공고)</h3>
+
+        <div class="notice-info">
+            <p><strong>주택 유형</strong> 행복주택</p>
+            <p><strong>접수 기간</strong> 2026-08-18 ~ 2026-08-20</p>
+            <p><strong>현재 상태</strong> 접수 예정</p>
+            <p><strong>대상 분류</strong> 청년 관련</p>
+        </div>
+
+        
+        <a
+            class="notice-link"
+            href="https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020519&amp;ccrCnntSysDsCd=03&amp;uppAisTpCd=06&amp;aisTpCd=10&amp;mi=1026"
+            target="_blank"
+        >
+            공고문 바로 보기
+        </a>
+        
+    </article>
+    
+    <article
+        class="notice-card"
+        data-region="경기"
+        data-target="청년 관련"
+    >
+        <div class="card-top">
+            <span class="region">경기</span>
+            <span class="d-day">D-4</span>
+        </div>
+
+        <h3>[청년신혼부부매입임대리츠]_경기남부지역 예비입주자 모집</h3>
+
+        <div class="notice-info">
+            <p><strong>주택 유형</strong> 매입임대</p>
+            <p><strong>접수 기간</strong> 2026-08-18 ~ 2026-08-20</p>
+            <p><strong>현재 상태</strong> 접수 예정</p>
+            <p><strong>대상 분류</strong> 청년 관련</p>
+        </div>
+
+        
+        <a
+            class="notice-link"
+            href="https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020480&amp;ccrCnntSysDsCd=03&amp;uppAisTpCd=13&amp;aisTpCd=26&amp;mi=1026"
+            target="_blank"
+        >
+            공고문 바로 보기
+        </a>
+        
+    </article>
+    
+    <article
+        class="notice-card"
+        data-region="경기"
+        data-target="청년 관련"
+    >
+        <div class="card-top">
+            <span class="region">경기</span>
+            <span class="d-day">D-4</span>
+        </div>
+
+        <h3>김포시 행복주택 입주자격완화 예비입주자 모집(26.08.06.)</h3>
+
+        <div class="notice-info">
+            <p><strong>주택 유형</strong> 행복주택</p>
+            <p><strong>접수 기간</strong> 2026-08-18 ~ 2026-08-20</p>
+            <p><strong>현재 상태</strong> 접수 예정</p>
+            <p><strong>대상 분류</strong> 청년 관련</p>
+        </div>
+
+        
+        <a
+            class="notice-link"
+            href="https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020525&amp;ccrCnntSysDsCd=03&amp;uppAisTpCd=06&amp;aisTpCd=10&amp;mi=1026"
+            target="_blank"
+        >
+            공고문 바로 보기
+        </a>
+        
+    </article>
+    
+    <article
+        class="notice-card"
+        data-region="경기"
+        data-target="청년 관련"
+    >
+        <div class="card-top">
+            <span class="region">경기</span>
+            <span class="d-day">D-4</span>
+        </div>
+
+        <h3>남양주 장현5 2BL 행복주택 예비입주자 입주자격완화 모집(2026.08.05.공고)</h3>
+
+        <div class="notice-info">
+            <p><strong>주택 유형</strong> 행복주택</p>
+            <p><strong>접수 기간</strong> 2026-08-18 ~ 2026-08-20</p>
+            <p><strong>현재 상태</strong> 접수 예정</p>
+            <p><strong>대상 분류</strong> 청년 관련</p>
+        </div>
+
+        
+        <a
+            class="notice-link"
+            href="https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020521&amp;ccrCnntSysDsCd=03&amp;uppAisTpCd=06&amp;aisTpCd=10&amp;mi=1026"
+            target="_blank"
+        >
+            공고문 바로 보기
+        </a>
+        
+    </article>
+    
+    <article
+        class="notice-card"
+        data-region="경기"
+        data-target="청년 관련"
+    >
+        <div class="card-top">
+            <span class="region">경기</span>
+            <span class="d-day">D-4</span>
+        </div>
+
+        <h3>[청년신혼부부매입임대리츠]_경기북부지역 입주자 모집</h3>
+
+        <div class="notice-info">
+            <p><strong>주택 유형</strong> 매입임대</p>
+            <p><strong>접수 기간</strong> 2026-08-18 ~ 2026-08-20</p>
+            <p><strong>현재 상태</strong> 접수 예정</p>
+            <p><strong>대상 분류</strong> 청년 관련</p>
+        </div>
+
+        
+        <a
+            class="notice-link"
+            href="https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020487&amp;ccrCnntSysDsCd=03&amp;uppAisTpCd=13&amp;aisTpCd=26&amp;mi=1026"
+            target="_blank"
+        >
+            공고문 바로 보기
+        </a>
+        
+    </article>
+    
+    <article
+        class="notice-card"
+        data-region="경기"
+        data-target="청년 관련"
+    >
+        <div class="card-top">
+            <span class="region">경기</span>
+            <span class="d-day">D-4</span>
+        </div>
+
+        <h3>구리,남양주시 행복주택 예비입주자모집(26.08.05공고)</h3>
+
+        <div class="notice-info">
+            <p><strong>주택 유형</strong> 행복주택</p>
+            <p><strong>접수 기간</strong> 2026-08-18 ~ 2026-08-20</p>
+            <p><strong>현재 상태</strong> 접수 예정</p>
+            <p><strong>대상 분류</strong> 청년 관련</p>
+        </div>
+
+        
+        <a
+            class="notice-link"
+            href="https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020536&amp;ccrCnntSysDsCd=03&amp;uppAisTpCd=06&amp;aisTpCd=10&amp;mi=1026"
+            target="_blank"
+        >
+            공고문 바로 보기
+        </a>
+        
+    </article>
+    
+    <article
+        class="notice-card"
+        data-region="경기"
+        data-target="청년 관련"
+    >
+        <div class="card-top">
+            <span class="region">경기</span>
+            <span class="d-day">D-4</span>
+        </div>
+
+        <h3>남양주 장현5 2BL 행복주택 예비입주자 입주자격완화 모집(2026.08.05.공고)</h3>
+
+        <div class="notice-info">
+            <p><strong>주택 유형</strong> 행복주택</p>
+            <p><strong>접수 기간</strong> 2026-08-18 ~ 2026-08-20</p>
+            <p><strong>현재 상태</strong> 접수 예정</p>
+            <p><strong>대상 분류</strong> 청년 관련</p>
+        </div>
+
+        
+        <a
+            class="notice-link"
+            href="https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020537&amp;ccrCnntSysDsCd=03&amp;uppAisTpCd=06&amp;aisTpCd=10&amp;mi=1026"
+            target="_blank"
+        >
+            공고문 바로 보기
+        </a>
+        
+    </article>
+    
+    <article
+        class="notice-card"
+        data-region="경기"
+        data-target="청년 관련"
+    >
+        <div class="card-top">
+            <span class="region">경기</span>
+            <span class="d-day">D-9</span>
+        </div>
+
+        <h3>의왕고천A-1BL[리츠]·안양명학A-1BL 행복주택 예비입주자 모집</h3>
+
+        <div class="notice-info">
+            <p><strong>주택 유형</strong> 행복주택</p>
+            <p><strong>접수 기간</strong> 2026-08-24 ~ 2026-08-25</p>
+            <p><strong>현재 상태</strong> 접수 예정</p>
+            <p><strong>대상 분류</strong> 청년 관련</p>
+        </div>
+
+        
+        <a
+            class="notice-link"
+            href="https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020552&amp;ccrCnntSysDsCd=03&amp;uppAisTpCd=06&amp;aisTpCd=10&amp;mi=1026"
+            target="_blank"
+        >
+            공고문 바로 보기
+        </a>
+        
+    </article>
+    
+    <article
+        class="notice-card"
+        data-region="경기"
+        data-target="청년 관련"
+    >
+        <div class="card-top">
+            <span class="region">경기</span>
+            <span class="d-day">D-10</span>
+        </div>
+
+        <h3>성남금토 A-4블록 신혼희망타운 행복주택 입주자 모집공고</h3>
+
+        <div class="notice-info">
+            <p><strong>주택 유형</strong> 행복주택</p>
+            <p><strong>접수 기간</strong> 2026-08-24 ~ 2026-08-26</p>
+            <p><strong>현재 상태</strong> 접수 예정</p>
+            <p><strong>대상 분류</strong> 청년 관련</p>
+        </div>
+
+        
+        <a
+            class="notice-link"
+            href="https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020534&amp;ccrCnntSysDsCd=03&amp;uppAisTpCd=39&amp;aisTpCd=42&amp;mi=1026"
+            target="_blank"
+        >
+            공고문 바로 보기
+        </a>
+        
+    </article>
+    
+    <article
+        class="notice-card"
+        data-region="경기"
+        data-target="청년 관련"
+    >
+        <div class="card-top">
+            <span class="region">경기</span>
+            <span class="d-day">D-12</span>
+        </div>
+
+        <h3>[수원시]수원시 역세권 새빛 청년존(Zone) 4호 및 1호 예비입주자 모집공고</h3>
+
+        <div class="notice-info">
+            <p><strong>주택 유형</strong> 매입임대</p>
+            <p><strong>접수 기간</strong> 2026-08-24 ~ 2026-08-28</p>
+            <p><strong>현재 상태</strong> 접수 예정</p>
+            <p><strong>대상 분류</strong> 청년 관련</p>
+        </div>
+
+        
+        <a
+            class="notice-link"
+            href="https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020560&amp;ccrCnntSysDsCd=03&amp;uppAisTpCd=13&amp;aisTpCd=26&amp;mi=1026"
+            target="_blank"
+        >
+            공고문 바로 보기
+        </a>
+        
+    </article>
+    
+    <article
+        class="notice-card"
+        data-region="경기"
+        data-target="청년 관련"
+    >
+        <div class="card-top">
+            <span class="region">경기</span>
+            <span class="d-day">D-12</span>
+        </div>
+
+        <h3>화성시 행복주택 입주자격완화 예비입주자 모집(26.08.05)</h3>
+
+        <div class="notice-info">
+            <p><strong>주택 유형</strong> 행복주택</p>
+            <p><strong>접수 기간</strong> 2026-08-27 ~ 2026-08-28</p>
+            <p><strong>현재 상태</strong> 접수 예정</p>
+            <p><strong>대상 분류</strong> 청년 관련</p>
+        </div>
+
+        
+        <a
+            class="notice-link"
+            href="https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020511&amp;ccrCnntSysDsCd=03&amp;uppAisTpCd=06&amp;aisTpCd=10&amp;mi=1026"
+            target="_blank"
+        >
+            공고문 바로 보기
+        </a>
+        
+    </article>
+    
+    <article
+        class="notice-card"
+        data-region="경기"
+        data-target="청년 관련"
+    >
+        <div class="card-top">
+            <span class="region">경기</span>
+            <span class="d-day">D-12</span>
+        </div>
+
+        <h3>남양주진접2 A-4BL 신혼희망타운 행복주택 최초 입주자 모집공고(‘26.08.13)</h3>
+
+        <div class="notice-info">
+            <p><strong>주택 유형</strong> 행복주택</p>
+            <p><strong>접수 기간</strong> 2026-08-25 ~ 2026-08-28</p>
+            <p><strong>현재 상태</strong> 접수 예정</p>
+            <p><strong>대상 분류</strong> 청년 관련</p>
+        </div>
+
+        
+        <a
+            class="notice-link"
+            href="https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020545&amp;ccrCnntSysDsCd=03&amp;uppAisTpCd=39&amp;aisTpCd=42&amp;mi=1026"
+            target="_blank"
+        >
+            공고문 바로 보기
+        </a>
+        
+    </article>
+    
+    <article
+        class="notice-card"
+        data-region="경기"
+        data-target="청년 관련"
+    >
+        <div class="card-top">
+            <span class="region">경기</span>
+            <span class="d-day">D-137</span>
+        </div>
+
+        <h3>2026년 신혼·신생아 전세임대 I 입주자 수시모집 공고</h3>
+
+        <div class="notice-info">
+            <p><strong>주택 유형</strong> 전세임대</p>
+            <p><strong>접수 기간</strong> 2026-03-24 ~ 2026-12-31</p>
+            <p><strong>현재 상태</strong> 접수 중</p>
+            <p><strong>대상 분류</strong> 청년 관련</p>
+        </div>
+
+        
+        <a
+            class="notice-link"
+            href="https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300019550&amp;ccrCnntSysDsCd=03&amp;uppAisTpCd=13&amp;aisTpCd=17&amp;mi=1026"
+            target="_blank"
+        >
+            공고문 바로 보기
+        </a>
+        
+    </article>
+    
+    <article
+        class="notice-card"
+        data-region="경기"
+        data-target="일반 공고"
+    >
+        <div class="card-top">
+            <span class="region">경기</span>
+            <span class="d-day">D-5</span>
+        </div>
+
+        <h3>장애인 자립특화형 주택 여기가 입주자 모집공고(경기도 김포시)</h3>
+
+        <div class="notice-info">
+            <p><strong>주택 유형</strong> 매입임대</p>
+            <p><strong>접수 기간</strong> 2026-08-10 ~ 2026-08-21</p>
+            <p><strong>현재 상태</strong> 마감 임박</p>
+            <p><strong>대상 분류</strong> 일반 공고</p>
+        </div>
+
+        
+        <a
+            class="notice-link"
+            href="https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020539&amp;ccrCnntSysDsCd=03&amp;uppAisTpCd=13&amp;aisTpCd=26&amp;mi=1026"
+            target="_blank"
+        >
+            공고문 바로 보기
+        </a>
+        
+    </article>
+    
+    <article
+        class="notice-card"
+        data-region="경기"
+        data-target="일반 공고"
+    >
+        <div class="card-top">
+            <span class="region">경기</span>
+            <span class="d-day">D-8</span>
+        </div>
+
+        <h3>화성시 동탄지역 영구임대주택 예비입주자 모집(‘26.08.05.)</h3>
+
+        <div class="notice-info">
+            <p><strong>주택 유형</strong> 영구임대</p>
+            <p><strong>접수 기간</strong> 2026-08-18 ~ 2026-08-24</p>
+            <p><strong>현재 상태</strong> 접수 예정</p>
+            <p><strong>대상 분류</strong> 일반 공고</p>
+        </div>
+
+        
+        <a
+            class="notice-link"
+            href="https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020515&amp;ccrCnntSysDsCd=03&amp;uppAisTpCd=06&amp;aisTpCd=09&amp;mi=1026"
+            target="_blank"
+        >
+            공고문 바로 보기
+        </a>
+        
+    </article>
+    
+    <article
+        class="notice-card"
+        data-region="경기"
+        data-target="일반 공고"
+    >
+        <div class="card-top">
+            <span class="region">경기</span>
+            <span class="d-day">D-11</span>
+        </div>
+
+        <h3>이천장호원 B2블록 통합공공임대주택 예비입주자 모집공고</h3>
+
+        <div class="notice-info">
+            <p><strong>주택 유형</strong> 통합공공임대</p>
+            <p><strong>접수 기간</strong> 2026-08-25 ~ 2026-08-27</p>
+            <p><strong>현재 상태</strong> 접수 예정</p>
+            <p><strong>대상 분류</strong> 일반 공고</p>
+        </div>
+
+        
+        <a
+            class="notice-link"
+            href="https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020531&amp;ccrCnntSysDsCd=03&amp;uppAisTpCd=06&amp;aisTpCd=48&amp;mi=1026"
+            target="_blank"
+        >
+            공고문 바로 보기
+        </a>
+        
+    </article>
+    
+    <article
+        class="notice-card"
+        data-region="경기"
+        data-target="일반 공고"
+    >
+        <div class="card-top">
+            <span class="region">경기</span>
+            <span class="d-day">D-137</span>
+        </div>
+
+        <h3>2026 다자녀 전세임대 입주자 수시모집 공고</h3>
+
+        <div class="notice-info">
+            <p><strong>주택 유형</strong> 전세임대</p>
+            <p><strong>접수 기간</strong> 2026-03-24 ~ 2026-12-31</p>
+            <p><strong>현재 상태</strong> 접수 중</p>
+            <p><strong>대상 분류</strong> 일반 공고</p>
+        </div>
+
+        
+        <a
+            class="notice-link"
+            href="https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300019546&amp;ccrCnntSysDsCd=03&amp;uppAisTpCd=13&amp;aisTpCd=17&amp;mi=1026"
+            target="_blank"
+        >
+            공고문 바로 보기
+        </a>
+        
+    </article>
+    
+        </div>
+    </section>
+
+    <footer class="footer">
+        신청 전 반드시 공식 공고문에서 자격과 일정을 확인하세요.
+    </footer>
+
 </div>
 
 
 <script>
-let currentRegion = "전체";
-
-
-function selectRegion(region, clickedButton) {
-    currentRegion = region;
-
-    document.querySelectorAll(".region-button").forEach(button => {
-        button.classList.remove("active");
-    });
-
-    clickedButton.classList.add("active");
-    filterTable();
-}
-
-
-function filterTable() {
+function filterCards() {
     const searchWord = document
         .getElementById("searchInput")
         .value
         .toLowerCase();
 
-    const selectedStatus = document
-        .getElementById("statusSelect")
+    const region = document
+        .getElementById("regionSelect")
         .value;
 
     const youthOnly = document
         .getElementById("youthOnly")
         .checked;
 
-    const rows = document.querySelectorAll(
-        "#noticeTable tbody tr"
-    );
+    document.querySelectorAll(".notice-card").forEach(card => {
+        const cardRegion = card.dataset.region;
+        const target = card.dataset.target;
+        const text = card.textContent.toLowerCase();
 
-    let visibleCount = 0;
-
-    rows.forEach(row => {
-        const region = row.dataset.region;
-        const status = row.dataset.status;
-        const target = row.dataset.target;
-        const rowText = row.textContent.toLowerCase();
+        const searchMatch = text.includes(searchWord);
 
         const regionMatch =
-            currentRegion === "전체" ||
-            region === currentRegion;
-
-        const searchMatch =
-            rowText.includes(searchWord);
-
-        const statusMatch =
-            selectedStatus === "전체" ||
-            status === selectedStatus;
+            region === "전체" ||
+            cardRegion === region;
 
         const youthMatch =
             !youthOnly ||
             target === "청년 관련";
 
-        const shouldShow =
-            regionMatch &&
-            searchMatch &&
-            statusMatch &&
-            youthMatch;
-
-        row.style.display = shouldShow ? "" : "none";
-
-        if (shouldShow) {
-            visibleCount++;
-        }
+        card.style.display =
+            searchMatch && regionMatch && youthMatch
+            ? ""
+            : "none";
     });
-
-    document.getElementById(
-        "resultCount"
-    ).textContent = `검색 결과: ${visibleCount}건`;
 }
-
-
-filterTable();
 </script>
 
 </body>
