@@ -3,8 +3,7 @@ name: Update housing dashboard
 on:
   workflow_dispatch:
   schedule:
-    - cron: "17 */3 * * *"
-
+    - cron: "17 0 * * *"
 permissions:
   contents: write
 
