@@ -7,11 +7,36 @@ from urllib.parse import unquote
 import folium
 import pandas as pd
 import requests
+from requests.adapters import HTTPAdapter
+from urllib3.util.retry import Retry
 
 
 API_URL = "https://apis.data.go.kr/1613000/HWSPR02/rsdtRcritNtcList"
 REGIONS = {"11": "서울", "41": "경기"}
 REGION_COORDS = {"서울": (37.5665, 126.9780), "경기": (37.4138, 127.5183)}
+
+
+def create_http_session():
+    """공공데이터 서버의 일시적인 지연·오류를 자동 재시도합니다."""
+    retry = Retry(
+        total=5,
+        connect=5,
+        read=5,
+        status=5,
+        backoff_factor=3,
+        status_forcelist=(429, 500, 502, 503, 504),
+        allowed_methods=frozenset(["GET"]),
+        raise_on_status=False,
+    )
+    adapter = HTTPAdapter(max_retries=retry)
+    session = requests.Session()
+    session.mount("https://", adapter)
+    session.mount("http://", adapter)
+    session.headers.update({"User-Agent": "housing-dashboard-github-actions/1.0"})
+    return session
+
+
+HTTP = create_http_session()
 
 
 def find_item_list(value):
@@ -62,7 +87,8 @@ def fetch_region(api_key, region_code, region_name):
         "pageNo": 1,
         "numOfRows": 1000,
     }
-    response = requests.get(API_URL, params=params, timeout=40)
+    # 연결 30초, 응답 90초. 실패하면 위 설정에 따라 최대 5회 재시도합니다.
+    response = HTTP.get(API_URL, params=params, timeout=(30, 90))
     response.raise_for_status()
 
     try:
