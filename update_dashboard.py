@@ -3,6 +3,7 @@ import os
 import re
 from datetime import datetime
 from urllib.parse import unquote
+from zoneinfo import ZoneInfo
 
 import folium
 import pandas as pd
@@ -12,8 +13,48 @@ from urllib3.util.retry import Retry
 
 
 API_URL = "https://apis.data.go.kr/1613000/HWSPR02/rsdtRcritNtcList"
-REGIONS = {"11": "서울", "41": "경기"}
-REGION_COORDS = {"서울": (37.5665, 126.9780), "경기": (37.4138, 127.5183)}
+REGIONS = {
+    "11": "서울",
+    "26": "부산",
+    "27": "대구",
+    "28": "인천",
+    "29": "광주",
+    "30": "대전",
+    "31": "울산",
+    "36": "세종",
+    "41": "경기",
+    "43": "충북",
+    "44": "충남",
+    "46": "전남",
+    "47": "경북",
+    "48": "경남",
+    "50": "제주",
+    "51": "강원",
+    "52": "전북",
+}
+
+# 일부 공공데이터 API가 특별자치도 전환 전 코드를 계속 쓰는 경우에 대비합니다.
+LEGACY_REGION_CODES = {"강원": "42", "전북": "45"}
+
+REGION_COORDS = {
+    "서울": (37.5665, 126.9780),
+    "부산": (35.1796, 129.0756),
+    "대구": (35.8714, 128.6014),
+    "인천": (37.4563, 126.7052),
+    "광주": (35.1595, 126.8526),
+    "대전": (36.3504, 127.3845),
+    "울산": (35.5384, 129.3114),
+    "세종": (36.4800, 127.2890),
+    "경기": (37.4138, 127.5183),
+    "강원": (37.8228, 128.1555),
+    "충북": (36.6357, 127.4917),
+    "충남": (36.6588, 126.6728),
+    "전북": (35.8203, 127.1088),
+    "전남": (34.8161, 126.4630),
+    "경북": (36.4919, 128.8889),
+    "경남": (35.4606, 128.2132),
+    "제주": (33.4996, 126.5312),
+}
 
 
 def create_http_session():
@@ -154,10 +195,20 @@ def collect_data():
 
     rows = []
     for code, name in REGIONS.items():
-        rows.extend(fetch_region(api_key, code, name))
+        try:
+            region_rows = fetch_region(api_key, code, name)
+        except requests.RequestException:
+            if name not in LEGACY_REGION_CODES:
+                raise
+            region_rows = []
+
+        if not region_rows and name in LEGACY_REGION_CODES:
+            region_rows = fetch_region(api_key, LEGACY_REGION_CODES[name], name)
+
+        rows.extend(region_rows)
 
     if not rows:
-        raise RuntimeError("서울·경기 공고를 한 건도 받지 못해 기존 파일을 유지합니다.")
+        raise RuntimeError("전국 공고를 한 건도 받지 못해 기존 파일을 유지합니다.")
 
     df = pd.DataFrame(rows).drop_duplicates(subset=["지역", "공고명", "원문 링크"])
     today = pd.Timestamp.now(tz="Asia/Seoul").tz_localize(None).normalize()
@@ -179,20 +230,20 @@ def save_excel(df):
 
 
 def save_map(df):
-    housing_map = folium.Map(location=[37.55, 127.05], zoom_start=8)
+    housing_map = folium.Map(location=[36.2, 127.8], zoom_start=7)
     for region, (lat, lon) in REGION_COORDS.items():
         region_df = df[df["지역"] == region]
         folium.Marker(
             [lat, lon],
             tooltip=f"{region} 공고 {len(region_df)}건",
             popup=folium.Popup(f"<b>{region}</b><br>진행 중 공고 {len(region_df)}건", max_width=260),
-            icon=folium.Icon(color="blue" if region == "서울" else "green", icon="home"),
+            icon=folium.Icon(color="blue", icon="home"),
         ).add_to(housing_map)
     housing_map.save("housing_map.html")
 
 
 def save_html(df):
-    updated_at = datetime.now().astimezone().strftime("%Y-%m-%d %H:%M")
+    updated_at = datetime.now(ZoneInfo("Asia/Seoul")).strftime("%Y-%m-%d %H:%M")
     cards = []
     for _, row in df.iterrows():
         title = html.escape(str(row["공고명"]))
@@ -209,7 +260,7 @@ def save_html(df):
         urgent = " urgent" if pd.notna(row["D-Day"]) and 0 <= row["D-Day"] <= 7 else ""
         search_text = html.escape(f"{title} {region} {kind}".lower(), quote=True)
         cards.append(
-            f'''<article class="card{urgent}" data-search="{search_text}">
+            f'''<article class="card{urgent}" data-search="{search_text}" data-region="{html.escape(str(row["지역"]), quote=True)}">
               <div class="meta"><span>{region}</span><span>{kind}</span><strong>{status}</strong></div>
               <h2>{title}</h2>
               <p>접수 마감: {deadline}</p>
@@ -222,7 +273,7 @@ def save_html(df):
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>서울·경기 공공주택 뉴스레터</title>
+  <title>전국 공공주택 뉴스레터</title>
   <style>
     * {{ box-sizing: border-box; }}
     body {{ margin: 0; background: #f4f6f8; color: #17212b; font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif; }}
@@ -230,8 +281,8 @@ def save_html(df):
     header div, main {{ max-width: 960px; margin: auto; }}
     h1 {{ margin: 0 0 10px; font-size: clamp(28px, 5vw, 44px); }}
     header p {{ margin: 5px 0; opacity: .9; }}
-    .toolbar {{ display: grid; grid-template-columns: 1fr auto auto; gap: 10px; margin: 22px 0; }}
-    input, .toolbar a {{ min-height: 45px; border: 1px solid #d8dee8; border-radius: 10px; padding: 11px 14px; background: white; color: #17345f; text-decoration: none; }}
+    .toolbar {{ display: grid; grid-template-columns: 1fr auto auto auto; gap: 10px; margin: 22px 0; }}
+    input, select, .toolbar a {{ min-height: 45px; border: 1px solid #d8dee8; border-radius: 10px; padding: 11px 14px; background: white; color: #17345f; text-decoration: none; }}
     .grid {{ display: grid; gap: 14px; padding-bottom: 50px; }}
     .card {{ background: white; border: 1px solid #e3e8ef; border-radius: 16px; padding: 20px; box-shadow: 0 5px 18px rgba(15, 23, 42, .06); }}
     .card.urgent {{ border-left: 6px solid #ef4444; }}
@@ -246,10 +297,11 @@ def save_html(df):
   </style>
 </head>
 <body>
-  <header><div><h1>서울·경기 공공주택 뉴스레터</h1><p>진행 중 공고 {len(df)}건</p><p>마지막 자동 갱신: {updated_at} (한국시간)</p></div></header>
+  <header><div><h1>전국 공공주택 뉴스레터</h1><p>진행 중 공고 {len(df)}건</p><p>마지막 자동 갱신: {updated_at} (한국시간)</p></div></header>
   <main>
     <div class="toolbar">
       <input id="search" type="search" placeholder="지역·공고명·주택유형 검색">
+      <select id="region"><option value="">전국</option>{''.join(f'<option value="{html.escape(region, quote=True)}">{html.escape(region)}</option>' for region in REGION_COORDS)}</select>
       <a href="housing_notices.xlsx" download>엑셀 받기</a>
       <a href="housing_map.html">지도 보기</a>
     </div>
@@ -258,17 +310,21 @@ def save_html(df):
   </main>
   <script>
     const input = document.getElementById('search');
+    const region = document.getElementById('region');
     const cards = [...document.querySelectorAll('.card')];
-    input.addEventListener('input', () => {{
+    function filterCards() {{
       const keyword = input.value.trim().toLowerCase();
+      const selectedRegion = region.value;
       let visible = 0;
       cards.forEach(card => {{
-        const show = card.dataset.search.includes(keyword);
+        const show = card.dataset.search.includes(keyword) && (!selectedRegion || card.dataset.region === selectedRegion);
         card.style.display = show ? '' : 'none';
         if (show) visible++;
       }});
       document.getElementById('empty').style.display = visible ? 'none' : 'block';
-    }});
+    }}
+    input.addEventListener('input', filterCards);
+    region.addEventListener('change', filterCards);
   </script>
 </body>
 </html>'''
